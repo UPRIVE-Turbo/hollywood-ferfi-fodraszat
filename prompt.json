@@ -1,0 +1,40 @@
+{
+  "project": {
+    "name": "Hollywood Férfi Fodrászat",
+    "slug": "hollywood-ferfi-fodraszat",
+    "language": "hu"
+  },
+  "business": {
+    "name": "Hollywood Férfi Fodrászat",
+    "industry": "Férfi fodrászat",
+    "city": "Miskolc",
+    "tier": "Tier 1",
+    "contact": {
+      "phone": "+36 30 978 4624",
+      "email": null,
+      "address": "Andrássy Gyula u. 3-5 (D lépcsőház), Miskolc",
+      "facebook": "https://www.facebook.com/hollywoodfodraszat",
+      "instagram": null
+    }
+  },
+  "design": {
+    "colors": {
+      "primary": "#22262A",
+      "background": "#EEE9E1"
+    },
+    "fonts": {
+      "heading": "Roboto",
+      "body": "Oswald"
+    }
+  },
+  "sections": [
+    "hero",
+    "services",
+    "about",
+    "gallery",
+    "booking-form",
+    "contact",
+    "footer"
+  ],
+  "full_prompt": "Készíts egy magyar nyelvű, egyoldalas landing page-et egy férfi fodrászatnak:\n\nAZ ÜZLET ADATAI:\n- Név: Hollywood Férfi Fodrászat\n- Cím: Andrássy Gyula u. 3-5 (D lépcsőház), Miskolc\n- Telefon: +36 30 978 4624\n- Facebook: facebook.com/hollywoodfodraszat\n- Szolgáltatások: Férfi hajvágás, szakálligazítás\n\nDESIGN:\n- Stílus: Klasszikus, maszkulin, retro-hollywoodi\n- Színek: Sötét antracit (#22262A) fejlécekhez, arany (#C5A04E) kiemelésekhez, krém (#EEE9E1) háttérhez, sötétszürke (#2A2A2A) szöveghez\n- Betűtípus: Karakteres (pl. Oswald címekhez, Roboto szöveghez)\n\nFELÉPÍTÉS (egyetlen görgethető oldal):\n1. Hero szekció: \"Hollywood Férfi Fodrászat — Miskolc\", szlogen (\"Klasszikus stílus, profi kezekben\"), CTA: \"Időpontfoglalás\"\n2. Szolgáltatások: Hajvágás, szakálligazítás, kombinált csomag — rövid leírás + ár\n3. Rólunk: A fodrászat bemutatkozása\n4. Galéria: 6 kép placeholder\n5. Időpontfoglalás űrlap: Név, telefon, szolgáltatás, kívánt időpont\n6. Elérhetőség: Telefon, cím, nyitvatartás, Google Maps\n7. Lábléc: Facebook, telefon, cím, © 2026\n\nHANGNEM: Magabiztos, közvetlen, klasszikus. Tegező.\n\nTECHNIKAI: Mobilbarát, reszponzív."
+}

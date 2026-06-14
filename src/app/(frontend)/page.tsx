@@ -1,59 +1,81 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
 import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
-
 import config from '@/payload.config'
-import './styles.css'
+
+import { SiteHeader } from '@/components/SiteHeader'
+import { Hero } from '@/components/Hero'
+import { Services } from '@/components/Services'
+import { About } from '@/components/About'
+import { Gallery } from '@/components/Gallery'
+import { BookingForm } from '@/components/BookingForm'
+import { Contact } from '@/components/Contact'
+import { Footer } from '@/components/Footer'
+import { ScrollReveal } from '@/components/ScrollReveal'
+
+const DEFAULT_OPENING_HOURS = [
+  { day: 'Hétfő - Péntek', hours: '09:00 - 19:00' },
+  { day: 'Szombat', hours: '09:00 - 14:00' },
+  { day: 'Vasárnap', hours: 'Zárva' },
+]
+
+const DEFAULT_MAP_EMBED =
+  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2668.6186980644365!2d20.781682115647565!3d48.10657927922099!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47409f2d129ea5b1%3A0xc3b8a3b8cd1adbe7!2sMiskolc%2C%20Andr%C3%A1ssy%20Gyula%20u.%203%2C%203530!5e0!3m2!1sen!2shu!4v1700000000000!5m2!1sen!2shu'
 
 export default async function HomePage() {
-  const headers = await getHeaders()
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const [settings, servicesResult, galleryResult] = await Promise.all([
+    payload.findGlobal({ slug: 'settings' }),
+    payload.find({ collection: 'services', sort: 'order', limit: 100 }),
+    payload.find({ collection: 'gallery', sort: 'order', limit: 100, depth: 1 }),
+  ])
+
+  const phone = settings.phone || '+36 30 978 4624'
+  const address = settings.address || 'Andrássy Gyula u. 3-5 (D lépcsőház), Miskolc'
+  const facebook = settings.facebook || 'https://www.facebook.com/hollywoodfodraszat'
+  const openingHours =
+    settings.openingHours && settings.openingHours.length > 0
+      ? settings.openingHours
+      : DEFAULT_OPENING_HOURS
+  const mapEmbedUrl = settings.mapEmbedUrl || DEFAULT_MAP_EMBED
+
+  const services = servicesResult.docs.map((doc) => ({
+    id: String(doc.id),
+    name: doc.name,
+    description: doc.description,
+    price: doc.price,
+    icon: doc.icon,
+    highlighted: doc.highlighted,
+  }))
+
+  const galleryImages = galleryResult.docs
+    .map((doc) => {
+      const media = typeof doc.image === 'object' ? doc.image : null
+      if (!media?.url) return null
+      return {
+        id: String(doc.id),
+        url: media.url,
+        alt: doc.alt,
+      }
+    })
+    .filter((img): img is { id: string; url: string; alt: string } => img !== null)
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
+    <div className="overflow-x-hidden">
+      <ScrollReveal />
+      <SiteHeader />
+      <Hero address={address} />
+      <Services services={services} />
+      <About />
+      <Gallery images={galleryImages} />
+      <BookingForm phone={phone} services={services} />
+      <Contact
+        address={address}
+        phone={phone}
+        openingHours={openingHours}
+        mapEmbedUrl={mapEmbedUrl}
+      />
+      <Footer address={address} phone={phone} facebook={facebook} />
     </div>
   )
 }

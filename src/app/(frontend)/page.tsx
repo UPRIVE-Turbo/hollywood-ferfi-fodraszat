@@ -24,10 +24,13 @@ export default async function HomePage() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
 
-  const [settings, servicesResult, galleryResult] = await Promise.all([
+  const [settings, hero, about, siteContent, servicesResult, galleryResult] = await Promise.all([
     payload.findGlobal({ slug: 'settings' }),
-    payload.find({ collection: 'services', sort: 'order', limit: 100 }),
-    payload.find({ collection: 'gallery', sort: 'order', limit: 100, depth: 1 }),
+    payload.findGlobal({ slug: 'hero' }),
+    payload.findGlobal({ slug: 'about' }),
+    payload.findGlobal({ slug: 'site-content' }),
+    payload.find({ collection: 'services', sort: '_order', limit: 100 }),
+    payload.find({ collection: 'gallery', sort: '_order', limit: 100, depth: 1 }),
   ])
 
   const phone = settings.phone || '+36 30 978 4624'
@@ -38,6 +41,14 @@ export default async function HomePage() {
       ? settings.openingHours
       : DEFAULT_OPENING_HOURS
   const mapEmbedUrl = settings.mapEmbedUrl || DEFAULT_MAP_EMBED
+
+  const heroBackgroundImage =
+    typeof hero.backgroundImage === 'object' && hero.backgroundImage?.url
+      ? hero.backgroundImage.url
+      : null
+
+  const aboutImage =
+    typeof about.image === 'object' && about.image?.url ? about.image.url : null
 
   const services = servicesResult.docs.map((doc) => ({
     id: String(doc.id),
@@ -63,19 +74,20 @@ export default async function HomePage() {
   return (
     <div className="overflow-x-hidden">
       <ScrollReveal />
-      <SiteHeader />
-      <Hero address={address} />
-      <Services services={services} />
-      <About />
-      <Gallery images={galleryImages} />
-      <BookingForm phone={phone} services={services} />
+      <SiteHeader content={siteContent} />
+      <Hero address={address} hero={hero} backgroundImage={heroBackgroundImage} />
+      <Services services={services} content={siteContent} />
+      <About about={about} image={aboutImage} />
+      <Gallery images={galleryImages} content={siteContent} />
+      <BookingForm phone={phone} services={services} content={siteContent} />
       <Contact
         address={address}
         phone={phone}
         openingHours={openingHours}
         mapEmbedUrl={mapEmbedUrl}
+        content={siteContent}
       />
-      <Footer address={address} phone={phone} facebook={facebook} />
+      <Footer address={address} phone={phone} facebook={facebook} content={siteContent} />
     </div>
   )
 }

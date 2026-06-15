@@ -2,15 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import type { SiteContent } from '@/payload-types'
 
-const navLinks = [
-  { href: '#szolgaltatasok', label: 'Szolgáltatások' },
-  { href: '#rolunk', label: 'Rólunk' },
-  { href: '#galeria', label: 'Galéria' },
-  { href: '#kapcsolat', label: 'Kapcsolat' },
-]
-
-export function SiteHeader() {
+export function SiteHeader({ content }: { content: SiteContent }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -20,6 +14,14 @@ export function SiteHeader() {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  const navLinks = [
+    { href: '#szolgaltatasok', label: content.navServicesLabel || 'Szolgáltatások' },
+    { href: '#rolunk', label: content.navAboutLabel || 'Rólunk' },
+    { href: '#galeria', label: content.navGalleryLabel || 'Galéria' },
+    { href: '#kapcsolat', label: content.navContactLabel || 'Kapcsolat' },
+  ]
+  const ctaLabel = content.navCtaLabel || 'Időpontfoglalás'
 
   return (
     <header
@@ -34,14 +36,16 @@ export function SiteHeader() {
           href="#"
           className="group relative z-50 flex flex-col leading-none font-heading text-2xl font-bold tracking-widest text-cream uppercase"
         >
-          <span className="text-sm tracking-[0.2em] text-gold">Est. Miskolc</span>
-          HOLLYWOOD
+          <span className="text-sm tracking-[0.2em] text-gold">
+            {content.logoEyebrow || 'Est. Miskolc'}
+          </span>
+          {content.logoText || 'HOLLYWOOD'}
           <span className="absolute -bottom-2 left-0 h-[2px] w-0 bg-gold transition-all duration-300 group-hover:w-full" />
         </a>
 
         <nav className="hidden items-center gap-10 font-heading text-sm tracking-wider text-cream/80 uppercase lg:flex">
           {navLinks.map((link) => (
-            <a key={link.href} href={link.href} className="transition-colors duration-300 hover:text-gold">
+            <a key={link.href} href={link.href} className="relative transition-colors duration-300 hover:text-gold after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full">
               {link.label}
             </a>
           ))}
@@ -51,7 +55,7 @@ export function SiteHeader() {
           href="#idopont"
           className="hidden items-center justify-center border border-gold px-8 py-3 font-heading text-sm tracking-widest text-gold uppercase transition-all duration-300 hover:bg-gold hover:text-anthracite active:scale-[0.98] lg:inline-flex"
         >
-          Időpontfoglalás
+          {ctaLabel}
         </a>
 
         <button

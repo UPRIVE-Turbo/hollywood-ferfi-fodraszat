@@ -3,6 +3,10 @@ import type { GlobalConfig } from 'payload'
 export const Settings: GlobalConfig = {
   slug: 'settings',
   label: 'Beállítások',
+  admin: {
+    group: 'Beállítások',
+    description: 'Cégadatok, elérhetőségek, nyitvatartás és közösségi linkek.',
+  },
   access: {
     read: () => true,
   },
@@ -67,6 +71,40 @@ export const Settings: GlobalConfig = {
       name: 'mapEmbedUrl',
       type: 'text',
       label: 'Google Maps embed URL',
+    },
+    {
+      type: 'collapsible',
+      label: 'SEO',
+      admin: {
+        initCollapsed: true,
+      },
+      fields: [
+        {
+          name: 'metaTitle',
+          type: 'text',
+          label: 'Meta cím',
+          defaultValue: 'Hollywood Férfi Fodrászat — Miskolc',
+          admin: {
+            description: 'A böngésző fülén és a keresőkben megjelenő cím.',
+          },
+        },
+        {
+          name: 'metaDescription',
+          type: 'textarea',
+          label: 'Meta leírás',
+          defaultValue:
+            'Klasszikus stílus, profi kezekben. Férfi hajvágás és szakálligazítás Miskolc belvárosában.',
+          admin: {
+            description: 'Rövid leírás a keresőtalálatokhoz és közösségi megosztásokhoz.',
+          },
+        },
+        {
+          name: 'metaImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Megosztási kép (OG kép)',
+        },
+      ],
     },
   ],
 }

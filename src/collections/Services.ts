@@ -7,9 +7,12 @@ export const Services: CollectionConfig = {
     plural: 'Szolgáltatások',
   },
   admin: {
+    group: 'Tartalom',
     useAsTitle: 'name',
-    defaultColumns: ['name', 'price', 'order'],
+    defaultColumns: ['name', 'price', 'highlighted'],
+    description: 'A főoldal "Szolgáltatások" szekciójának kártyái. Sorrend: húzd-dobd az admin listában.',
   },
+  orderable: true,
   access: {
     read: () => true,
   },
@@ -44,17 +47,14 @@ export const Services: CollectionConfig = {
       ],
     },
     {
-      name: 'order',
-      type: 'number',
-      label: 'Sorrend',
-      defaultValue: 0,
-    },
-    {
       name: 'highlighted',
       type: 'checkbox',
       label: 'Kiemelt csomag',
       defaultValue: false,
+      admin: {
+        description: 'Kiemelten, aranykerettel jelenik meg a "Gyakori választás" jelöléssel.',
+      },
     },
   ],
-  defaultSort: 'order',
+  defaultSort: '_order',
 }

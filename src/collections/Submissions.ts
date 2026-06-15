@@ -7,8 +7,10 @@ export const Submissions: CollectionConfig = {
     plural: 'Időpontfoglalások',
   },
   admin: {
+    group: 'Megkeresések',
     useAsTitle: 'name',
     defaultColumns: ['name', 'phone', 'service', 'preferredDate', 'createdAt'],
+    description: 'Az időpontfoglalási űrlapon beérkezett megkeresések.',
   },
   access: {
     read: () => true,

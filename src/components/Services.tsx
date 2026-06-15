@@ -1,4 +1,5 @@
 import { Crown, Scissors, Sparkles } from 'lucide-react'
+import type { SiteContent } from '@/payload-types'
 
 export type Service = {
   id: string
@@ -15,12 +16,16 @@ const icons: Record<string, React.ComponentType<{ className?: string }>> = {
   crown: Crown,
 }
 
-export function Services({ services }: { services: Service[] }) {
+export function Services({ services, content }: { services: Service[]; content: SiteContent }) {
+  const heading = content.servicesHeading || 'Szolgáltatások'
+  const highlightBadge = content.servicesHighlightBadge || 'Gyakori választás'
+  const priceLabel = content.servicesPriceLabel || 'Ártól'
+
   return (
     <section id="szolgaltatasok" className="relative z-10 w-full bg-cream px-4 py-24 md:py-40">
       <div className="reveal-up mx-auto mb-20 flex max-w-[1400px] items-center gap-6">
         <h2 className="shrink-0 font-heading text-5xl font-bold tracking-tighter text-anthracite uppercase md:text-7xl">
-          Szolgáltatások
+          {heading}
         </h2>
         <div className="h-[1px] flex-1 bg-anthracite/20" />
       </div>
@@ -31,7 +36,7 @@ export function Services({ services }: { services: Service[] }) {
           return (
             <article
               key={service.id}
-              className={`reveal-up stagger-${Math.min(i + 1, 3)} group relative flex h-full flex-col overflow-hidden bg-anthracite p-10 md:p-14 ${
+              className={`reveal-up stagger-${Math.min(i + 1, 3)} group relative flex h-full flex-col overflow-hidden bg-anthracite p-10 transition-transform duration-500 hover:-translate-y-2 md:p-14 ${
                 service.highlighted ? 'shadow-gold-glow ring-1 ring-gold' : ''
               }`}
             >
@@ -51,7 +56,7 @@ export function Services({ services }: { services: Service[] }) {
 
               {service.highlighted && (
                 <div className="relative z-10 mb-6 w-fit bg-gold px-3 py-1 font-heading text-xs font-bold tracking-widest text-anthracite uppercase">
-                  Gyakori választás
+                  {highlightBadge}
                 </div>
               )}
 
@@ -71,7 +76,7 @@ export function Services({ services }: { services: Service[] }) {
                   service.highlighted ? 'border-gold/30' : 'border-cream/10 group-hover:border-gold/30'
                 }`}
               >
-                <span className="font-heading text-lg tracking-widest text-gold uppercase">Ártól</span>
+                <span className="font-heading text-lg tracking-widest text-gold uppercase">{priceLabel}</span>
                 <span
                   className={`font-heading text-3xl font-bold drop-shadow-md ${
                     service.highlighted ? 'text-gold' : 'text-cream'

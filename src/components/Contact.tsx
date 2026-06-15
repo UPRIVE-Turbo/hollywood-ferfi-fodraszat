@@ -1,4 +1,5 @@
 import { Clock, MapPin, Phone } from 'lucide-react'
+import type { SiteContent } from '@/payload-types'
 
 export type OpeningHour = {
   day: string
@@ -10,13 +11,20 @@ export function Contact({
   phone,
   openingHours,
   mapEmbedUrl,
+  content,
 }: {
   address: string
   phone: string
   openingHours: OpeningHour[]
   mapEmbedUrl: string
+  content: SiteContent
 }) {
   const telLink = `tel:${phone.replace(/\s+/g, '')}`
+  const heading = content.contactHeading || 'Információk'
+  const cityLabel = content.contactCityLabel || 'Miskolc'
+  const addressLabel = content.contactAddressLabel || 'Címünk'
+  const phoneLabel = content.contactPhoneLabel || 'Telefonszám'
+  const hoursLabel = content.contactHoursLabel || 'Nyitvatartás'
 
   return (
     <section id="kapcsolat" className="flex w-full flex-col border-t border-cream/10 bg-anthracite md:flex-row">
@@ -36,7 +44,7 @@ export function Contact({
 
       <div className="flex w-full flex-col justify-center p-12 md:w-1/2 lg:p-24">
         <h2 className="reveal-up relative mb-12 inline-block font-heading text-5xl font-bold tracking-tighter text-cream uppercase">
-          Információk
+          {heading}
           <span className="absolute -bottom-4 left-0 h-1 w-24 bg-gold" />
         </h2>
 
@@ -47,9 +55,9 @@ export function Contact({
             </div>
             <div>
               <h4 className="mb-2 font-heading text-sm tracking-widest text-gold uppercase">
-                Címünk
+                {addressLabel}
               </h4>
-              <p className="mb-1 font-heading text-2xl text-cream uppercase">Miskolc</p>
+              <p className="mb-1 font-heading text-2xl text-cream uppercase">{cityLabel}</p>
               <p className="font-body text-lg text-cream/70">{address}</p>
             </div>
           </div>
@@ -60,7 +68,7 @@ export function Contact({
             </div>
             <div>
               <h4 className="mb-2 font-heading text-sm tracking-widest text-gold uppercase">
-                Telefonszám
+                {phoneLabel}
               </h4>
               <a
                 href={telLink}
@@ -77,7 +85,7 @@ export function Contact({
             </div>
             <div className="w-full max-w-[300px]">
               <h4 className="mb-4 font-heading text-sm tracking-widest text-gold uppercase">
-                Nyitvatartás
+                {hoursLabel}
               </h4>
               {openingHours.map((item) => (
                 <div

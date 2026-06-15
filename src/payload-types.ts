@@ -95,9 +95,15 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     settings: Setting;
+    hero: Hero;
+    about: About;
+    'site-content': SiteContent;
   };
   globalsSelect: {
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    hero: HeroSelect<false> | HeroSelect<true>;
+    about: AboutSelect<false> | AboutSelect<true>;
+    'site-content': SiteContentSelect<false> | SiteContentSelect<true>;
   };
   locale: null;
   widgets: {
@@ -172,33 +178,45 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * A főoldal "Szolgáltatások" szekciójának kártyái. Sorrend: húzd-dobd az admin listában.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
   id: number;
+  _order?: string | null;
   name: string;
   description: string;
   price: string;
   icon?: ('scissors' | 'razor' | 'crown') | null;
-  order?: number | null;
+  /**
+   * Kiemelten, aranykerettel jelenik meg a "Gyakori választás" jelöléssel.
+   */
   highlighted?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * A "Műhelytitkok" galéria szekció képei. Sorrend: húzd-dobd az admin listában.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery".
  */
 export interface Gallery {
   id: number;
+  _order?: string | null;
   image: number | Media;
+  /**
+   * Rövid leírás a képről (kereshetőség és akadálymentesség miatt).
+   */
   alt: string;
-  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
+ * Az időpontfoglalási űrlapon beérkezett megkeresések.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
  */
@@ -344,11 +362,11 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
+  _order?: T;
   name?: T;
   description?: T;
   price?: T;
   icon?: T;
-  order?: T;
   highlighted?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -358,9 +376,9 @@ export interface ServicesSelect<T extends boolean = true> {
  * via the `definition` "gallery_select".
  */
 export interface GallerySelect<T extends boolean = true> {
+  _order?: T;
   image?: T;
   alt?: T;
-  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -419,6 +437,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Cégadatok, elérhetőségek, nyitvatartás és közösségi linkek.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "settings".
  */
@@ -438,6 +458,100 @@ export interface Setting {
   facebook?: string | null;
   instagram?: string | null;
   mapEmbedUrl?: string | null;
+  /**
+   * A böngésző fülén és a keresőkben megjelenő cím.
+   */
+  metaTitle?: string | null;
+  /**
+   * Rövid leírás a keresőtalálatokhoz és közösségi megosztásokhoz.
+   */
+  metaDescription?: string | null;
+  metaImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * A főoldal legfelső, teljes képernyős szekciójának szövegei és háttérképe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero".
+ */
+export interface Hero {
+  id: number;
+  titleLine1: string;
+  titleLine2: string;
+  subtitle: string;
+  ctaLabel: string;
+  /**
+   * Ha nincs kiválasztva, az alapértelmezett borbély fotó jelenik meg.
+   */
+  backgroundImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * A "Rólunk" szekció szövegei, statisztikái és képe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about".
+ */
+export interface About {
+  id: number;
+  eyebrow: string;
+  headingLine1: string;
+  headingLine2: string;
+  headingHighlight: string;
+  paragraph1: string;
+  paragraph2: string;
+  /**
+   * Ha nincs kiválasztva, az alapértelmezett szalon fotó jelenik meg.
+   */
+  image?: (number | null) | Media;
+  stat1Value: string;
+  stat1Label: string;
+  stat2Value: string;
+  stat2Label: string;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * A fejléc, illetve a szolgáltatások, galéria, foglalás, kapcsolat és lábláb szekciók apró szövegei.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-content".
+ */
+export interface SiteContent {
+  id: number;
+  logoEyebrow: string;
+  logoText: string;
+  navServicesLabel: string;
+  navAboutLabel: string;
+  navGalleryLabel: string;
+  navContactLabel: string;
+  navCtaLabel: string;
+  servicesHeading: string;
+  servicesHighlightBadge: string;
+  servicesPriceLabel: string;
+  galleryHeadingMain: string;
+  galleryHeadingHighlight: string;
+  gallerySubtitle: string;
+  bookingHeadingLine1: string;
+  bookingHeadingLine2: string;
+  bookingHeadingHighlight: string;
+  bookingDescription: string;
+  bookingCallLabel: string;
+  bookingSuccessTitle: string;
+  bookingSuccessMessage: string;
+  contactHeading: string;
+  contactCityLabel: string;
+  contactAddressLabel: string;
+  contactPhoneLabel: string;
+  contactHoursLabel: string;
+  footerBrandTitle: string;
+  footerBrandSubtitle: string;
+  footerCopyright: string;
+  footerFacebookLabel: string;
+  footerCtaLabel: string;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -460,6 +574,82 @@ export interface SettingsSelect<T extends boolean = true> {
   facebook?: T;
   instagram?: T;
   mapEmbedUrl?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  metaImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero_select".
+ */
+export interface HeroSelect<T extends boolean = true> {
+  titleLine1?: T;
+  titleLine2?: T;
+  subtitle?: T;
+  ctaLabel?: T;
+  backgroundImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_select".
+ */
+export interface AboutSelect<T extends boolean = true> {
+  eyebrow?: T;
+  headingLine1?: T;
+  headingLine2?: T;
+  headingHighlight?: T;
+  paragraph1?: T;
+  paragraph2?: T;
+  image?: T;
+  stat1Value?: T;
+  stat1Label?: T;
+  stat2Value?: T;
+  stat2Label?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-content_select".
+ */
+export interface SiteContentSelect<T extends boolean = true> {
+  logoEyebrow?: T;
+  logoText?: T;
+  navServicesLabel?: T;
+  navAboutLabel?: T;
+  navGalleryLabel?: T;
+  navContactLabel?: T;
+  navCtaLabel?: T;
+  servicesHeading?: T;
+  servicesHighlightBadge?: T;
+  servicesPriceLabel?: T;
+  galleryHeadingMain?: T;
+  galleryHeadingHighlight?: T;
+  gallerySubtitle?: T;
+  bookingHeadingLine1?: T;
+  bookingHeadingLine2?: T;
+  bookingHeadingHighlight?: T;
+  bookingDescription?: T;
+  bookingCallLabel?: T;
+  bookingSuccessTitle?: T;
+  bookingSuccessMessage?: T;
+  contactHeading?: T;
+  contactCityLabel?: T;
+  contactAddressLabel?: T;
+  contactPhoneLabel?: T;
+  contactHoursLabel?: T;
+  footerBrandTitle?: T;
+  footerBrandSubtitle?: T;
+  footerCopyright?: T;
+  footerFacebookLabel?: T;
+  footerCtaLabel?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import type { SiteContent } from '@/payload-types'
 
 export type GalleryImage = {
   id: string
@@ -39,18 +40,20 @@ const fallbackImages: GalleryImage[] = [
   },
 ]
 
-export function Gallery({ images }: { images: GalleryImage[] }) {
+export function Gallery({ images, content }: { images: GalleryImage[]; content: SiteContent }) {
   const items = images.length > 0 ? images : fallbackImages
+  const headingMain = content.galleryHeadingMain || 'Műhely'
+  const headingHighlight = content.galleryHeadingHighlight || 'titkok'
+  const subtitle = content.gallerySubtitle || 'Vágások, hangulatok, és az eszközök amikkel dolgozunk.'
 
   return (
     <section id="galeria" className="relative w-full bg-anthracite px-4 py-24">
       <div className="reveal-up mx-auto mb-16 max-w-[1400px] text-center">
         <h2 className="font-heading text-5xl font-bold tracking-tighter text-cream uppercase md:text-7xl">
-          Műhely<span className="text-gold">titkok</span>
+          {headingMain}
+          <span className="text-gold">{headingHighlight}</span>
         </h2>
-        <p className="mt-4 font-body text-cream/50">
-          Vágások, hangulatok, és az eszközök amikkel dolgozunk.
-        </p>
+        <p className="mt-4 font-body text-cream/50">{subtitle}</p>
       </div>
 
       <div className="mx-auto grid max-w-[1400px] grid-cols-2 gap-2 md:gap-4 lg:grid-cols-3">
